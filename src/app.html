@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bill Integrity Agent</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/*__BUILD:STYLES__*/</style>
+</head>
+<body>
+<header>
+<div>
+<h1>Bill Integrity Agent · pre-invoice check</h1>
+<div class="sub">Reads delivery and inspection documents, re-rates each bill with the contract, and proposes evidence-backed fixes. A biller approves every charge. Fictional carrier, tariff and contracts.</div>
+</div>
+<div class="controls">
+<div class="seg" role="group" aria-label="View"><button id="viewReview" class="on">Agent review</button><button id="viewRollout">Rollout plan</button></div>
+<div class="seg review-only" role="group" aria-label="Test set">
+<button id="dsDev" class="on">Dev set (8)</button>
+<button id="dsBlind">Blind set (15)</button>
+</div>
+<div class="seg review-only" role="group" aria-label="Extraction source">
+<button id="modeSaved" class="on">Saved run</button>
+<button id="modeLive">Live AI</button>
+</div>
+<button id="runBtn" class="btn primary review-only">Run check</button>
+<button id="run3Btn" class="btn review-only" title="Three independent live AI runs, cache off">Run 3× live</button>
+<button id="stopBtn" class="btn" hidden>Stop</button>
+<button id="themeBtn" class="btn" title="Toggle theme">◐</button>
+</div>
+</header>
+<div class="status" id="status">Loading…</div>
+<div class="summary" id="summary"></div>
+<main>
+<section class="panel"><h2>Bills to invoice</h2><ul class="queue" id="queue"></ul></section>
+<section class="panel"><h2>Source documents</h2><div class="docs" id="docs"><div class="empty">Select a bill.</div></div></section>
+<section class="panel"><h2>Agent check</h2><div class="right" id="right"><div class="empty">Select a bill.</div></div></section>
+</main>
+<details class="panel" id="evalPanel" open><summary>Scorecard vs frozen answer key · stability across live runs</summary><div class="pbody" id="evalBody"></div></details>
+<details class="panel" id="memPanel"><summary>Exception learning · candidate memory (inactive until its activation gates are met)</summary><div class="pbody" id="memBody"></div></details>
+<!--__BUILD:PANEL:EVALS__-->
+<!--__BUILD:PANEL:ARCHITECTURE__-->
+<details class="panel"><summary>Raw AI output</summary><div class="pbody"><pre class="raw" id="raw">No run yet.</pre></div></details>
+<details class="panel"><summary>Run log and history</summary><div class="pbody" id="logBody"></div></details>
+<details class="panel"><summary>How it works and what we learned</summary><div class="pbody">
+<p><b>Three layers.</b> 1) The AI only reads documents and returns evidence with exact quotes. 2) Fixed rules do everything that touches money: contract version by pickup date, fuel surcharge week, density class, freight-all-kinds (FAK) ranges, accessorial prices. 3) A biller approves, overrides or escalates every bill.</p>
+<p><b>Safety does not depend on the model.</b> Every quote is checked word for word against the documents; an unverified quote sends the bill to a person. The model's confidence is ignored for status. Backstop rules re-read the bill of lading's requested services and every pickup date themselves, so a miss by the AI still lands in review, never in a silent charge.</p>
+<p><b>v2 backstops (added after the blind test).</b> Rules, not the AI, now also: scan delivery notes for any service or unsupported charge the AI did not extract; flag documents that try to instruct the system; refuse a charge unless a quote names the service; check negation only in the clause that names the service; verify inspection numbers as whole numbers in order; escalate certificates with pieces of different sizes. Each can only send a bill to a person, never add a charge.</p>
+<p><b>Source-of-truth precedence.</b> Contract / tariff and shipment evidence (BOL, POD, W&amp;I) &gt; operational notes and free text &gt; model inference. Biller resolutions become candidate memory. Three examples marks a pattern, not activation: rules activate by risk tier (routing-only rules after review, regression and scoping; customer-specific money rules also need more examples and a short shadow; general money rules need the most evidence, wider regression, owner approval and shadow validation). A learned rule never overrides contract or shipment evidence.</p>
+<p><b>Outcomes.</b> Clear (no change) · Propose fix (evidence complete; biller approves) · Request info (a document is missing) · Escalate (conflict or ambiguity a person must decide).</p>
+<p><b>Traps in this test set.</b> <span id="trapsText"></span></p>
+</div></details>
+<div id="rollout"></div>
+<div id="rJson" hidden><b>Plan as JSON</b><div class="muted">Copy this to keep or share a scenario, or paste an edited plan and click Apply (for example, new case facts).</div><textarea id="rJsonText" spellcheck="false"></textarea><div><button class="btn primary" id="rJsonApply">Apply</button> <button class="btn" id="rJsonClose">Close</button></div></div>
+<footer>Prototype for discussion · all data fictional · answer key frozen before any AI run (sha256 <span id="keySha"></span>)</footer>
+
+<script>
+/*__BUILD:SCRIPT__*/</script>
+</body>
+</html>

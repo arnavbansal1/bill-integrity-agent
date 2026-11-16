@@ -134,3 +134,4 @@ function endDemo(){if(demoHl)demoHl.classList.remove("demo-hl");demoHl=null;demo
 document.addEventListener("keydown",e=>{if(demoI<0||/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)||document.activeElement.isContentEditable)return;if(e.key==="ArrowRight")$("dmF").click();if(e.key==="ArrowLeft"&&demoI>0)startDemo(demoI-1);if(e.key==="Escape")endDemo()});
 setupToolbar();setupLayers();renderGT();renderRight();
 window.__demo={runDrill,startDemo,endDemo,loadRecorded,setLayer,DEMO};
+

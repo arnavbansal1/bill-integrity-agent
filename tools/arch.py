@@ -183,15 +183,6 @@ def panel_html():
 <p class="note">Production components are the planned design, not something this prototype runs. Synthetic evals here are development evidence, not production validation.</p>
 </div></details>'''
 
-CSS = '''.archwrap{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:6px}
-.archwrap svg{width:100%;height:auto;display:block}
-.p2p{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-@media (max-width:900px){.p2p{grid-template-columns:repeat(2,1fr)}}
-.p2p-step{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--soft);font-size:13px}
-.p2p-n{width:22px;height:22px;border-radius:50%;background:var(--accent,#0F766E);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-bottom:6px}
-.p2p-d{margin-top:6px;line-height:1.4}\n.p2p-tag{display:inline-block;margin-top:4px;font-size:11.5px;font-weight:700;padding:1px 8px;border-radius:999px;background:#E1F5EE;color:#0F6E56}\n.p2p-part .p2p-tag{background:#FAEEDA;color:#9A5B00}.p2p-next .p2p-tag{background:#F1EFE8;color:#5F5E5A}.p2p-next{background:transparent}
-'''
-
 if __name__ == "__main__":
     import pathlib
     out = pathlib.Path(str(ROOT/"docs/img")); out.mkdir(exist_ok=True)

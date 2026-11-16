@@ -1,0 +1,40 @@
+/* ---------- Gates: threshold (editable) vs observed actuals (editable) vs evidence (from stored live runs) ---------- */
+function gates(){
+ const t=R.plan.thresholds,s=R.plan.actuals.shadow,p=R.plan.actuals.pilot,m=model(),E=R.evidence;
+ const pct=x=>x==null?"–":(x*100).toFixed(x<0.01?2:1)+"%";
+ const g=[];
+ const add=(phase,label,target,obs,met,ev,why)=>g.push({phase,label,target,obs,status:obs==null?"Unproven":met?"Met":"Not met",ev,why});
+ const JS=num(s.joinSampled),JO=num(s.joinOk);const jlb=JS&&JO!=null?lower95(JO,JS):null;
+ add("shadow","Historical data readiness: sampled shipments that join end to end",`≥ ${t.joinMin}% at 95% confidence (sample ~200 first)`,jlb==null?null:pct(jlb),jlb!=null&&jlb>=t.joinMin/100,`assumed ${A("joinRate")}%`,"Below this, history is partial: edge cases only, rates move to live.");
+ const CS=num(s.clusterSegs);
+ add("shadow","Missingness is not clustered",`0 terminals / customers / doc types / error types more than ${t.clusterGap} pts below overall linkage`,CS==null?null:`${CS} segment${CS===1?"":"s"}`,CS===0,T("clustered")?"assumed clustered":"assumed not clustered","A clustered gap means the joined subset is a different population.");
+ const P=num(s.proposals),W=num(s.wrong);const ub=P!=null&&W!=null?upper95(W,P):null;
+ add("shadow","Wrong proposed charges (random sample + live)",`≤ ${t.tol}% at 95% confidence (≈${m.needFix} representative proposals, 0 wrong)`,ub==null?null:pct(ub),ub!=null&&ub<=t.tol/100,E?`${E.wrong} wrong / ${E.fixes} proposals in ${E.runs} live runs (synthetic)`:"–","The one number we never trade away.");
+ const MT=num(s.mustTotal),MC=num(s.mustCaught);const lb=MT!=null&&MC!=null?lower95(MC,MT):null;
+ add("shadow","Must-act bills sent to a person (audited history + live)",`≥ ${t.minRecall}% at 95% confidence (≈${m.needMust} must-act bills)`,lb==null?null:pct(lb),lb!=null&&lb>=t.minRecall/100,E?`${E.mustCaught}/${E.mustTotal} (synthetic)`:"–","A miss here means a bad invoice goes out silently.");
+ const SB=num(s.bills),PB=num(s.personBills);const prr=SB&&PB!=null?PB/SB:null;
+ add("shadow","Bills sent to a person (random sample + live)",`≤ ${t.maxPerson}%`,prr==null?null:pct(prr),prr!=null&&prr<=t.maxPerson/100,E?`${pct(E.personRate)} on a trap-dense set (not representative)`:"–","Sets the time saved; too high and the agent creates work.");
+ const AP=num(s.audProposals),AW=num(s.audWrong);const aub=AP!=null&&AW!=null?upper95(AW,AP):null;
+ add("shadow","Wrong proposals on audited history (edge cases)",`≤ ${t.tol}% after adjudication`,aub==null?null:pct(aub),aub!=null&&aub<=t.tol/100,"–","Safety on the hard cases; not a production rate.");
+ const QC=num(s.qaChecked),QM=num(s.qaMisses);const qub=QC&&QM!=null?upper95(QM,QC):null;
+ add("shadow","Clear bills with a missed error (QA sample)",`≤ ${t.maxClearMiss}% at 95% confidence`,qub==null?null:pct(qub),qub!=null&&qub<=t.maxClearMiss/100,E?`${E.missedRecovery} missed recovery (synthetic)`:"–","Revenue left on the table, not a customer harm.");
+ const reg=E?E.regressionPass:null;
+ add("shadow","Frozen-key regression set passes",`0 wrong, all must-act, on dev + blind`,reg==null?null:(reg?"Pass":"Fail"),!!reg,E?`agent ${E.version}: ${E.regressionNote}`:"–","Re-run on every model, prompt or rule change.");
+ const FA=num(p.fixesApproved),WR=num(p.wrongReached);const pub=FA!=null&&WR!=null?upper95(WR,FA):null;
+ add("pilot","Wrong charges reaching customers",`≤ ${t.tol}% at 95% confidence`,pub==null?null:pct(pub),pub!=null&&pub<=t.tol/100,"–","Measured on posted invoices, not proposals.");
+ const RB=num(p.rebills),DS=num(p.disputes),BD=num(p.baselineDispute);const dr=RB&&DS!=null?DS/RB:null;
+ add("pilot","Dispute rate on agent-changed invoices",BD!=null?`≤ ${(BD+t.disputeMargin).toFixed(1)}% (baseline + ${t.disputeMargin} pts)`:`≤ baseline + ${t.disputeMargin} pts (enter baseline)`,dr==null||BD==null?null:pct(dr),dr!=null&&BD!=null&&dr*100<=BD+t.disputeMargin,"–","Customer trust: rebills must not create more disputes.");
+ const MPB=num(p.minPerBill),BM=num(p.baselineMin);const sv=MPB!=null&&BM?1-MPB/BM:null;
+ if(!T("tmsWrite"))g.push({phase:"pilot",label:"Biller minutes per bill vs baseline",target:"n/a in side-car: measured, not gating; the time gate moves to scale (after write-back)",obs:MPB==null?null:MPB+" min",status:"N/A",ev:`side-car ${fmtN(m.hAgent)} h vs write-back ${fmtN(m.hAgentWB)} h/mo (model)`,why:"Keying time is the integration business case."});
+ else add("pilot","Biller minutes per bill vs baseline",`≥ ${t.targetSave}% fewer`,sv==null?null:pct(sv),sv!=null&&sv>=t.targetSave/100,`model: ${m.hToday>0?pct(m.hoursSaved/m.hToday):"–"} fewer hours`,"Operations: does the agent save time?");
+ const DH=num(p.delayHrs);const lm=lateMode();
+ const LO=num(p.lateObs);
+ add("pilot","Late evidence: bills corrected after invoicing",`≤ ${t.lateMax}% (placeholder; set from late share × dispute cost × customer impact)`,LO==null?null:LO+"%",LO!=null&&LO<=t.lateMax,`assumed ${A("lateShare")}%`,"Above this, rebills become the workflow: stop scaling correction, move the workflow upstream to evidence completeness.");
+ if(lm==="routine"||!T("preInvoice"))g.push({phase:"pilot",label:"Added invoice cycle time",target:lm==="routine"?"n/a: workflow moved upstream to evidence completeness":"n/a: invoices are not held (post-invoice correction)",obs:null,status:"N/A",ev:"–",why:"Delay risk moves to disputes."});
+ else add("pilot","Added invoice cycle time",`≤ ${t.maxDelay} h`,DH==null?null:DH+" h",DH!=null&&DH<=t.maxDelay,`POD latency ${A("podLatency")} h vs SLA ${A("invoiceSla")} h`,"The hold must not slow cash.");
+ const OV=num(p.overrides);const orr=FA&&OV!=null?OV/FA:null;
+ add("pilot","Biller overrides of proposed fixes",`≤ ${t.maxOverride}%`,orr==null?null:pct(orr),orr!=null&&orr<=t.maxOverride/100,"–","Leading indicator of a wrong charge.");
+ const RC=num(p.recovered);
+ add("pilot","Realized recovery (invoiced, net of disputes and credits; pilot scope, per month)",`≥ ${money0(t.recoverTarget*A("pilotShare")/100)} (${A("pilotShare")}% of ${money0(t.recoverTarget)} target)`,RC==null?null:money0(RC),RC!=null&&RC>=t.recoverTarget*A("pilotShare")/100,`model at scale: ${money0(m.recovered)}/mo`,"Business outcome.");
+ return g;
+}

@@ -24,7 +24,7 @@ Speed: about 29 s of AI time per 15-bill batch (~2 s per bill).
 ## Adversarial: AI mistakes that became money in v1
 Wrong charges: obeying the injection (+$65); taking the taller pallet's size for both (+$290.69 instead of +$212.43); calling detention an appointment (+$25); wrong piece count with a true quote (−$153.68); height "4" passing because "4" is inside "48" (−$76.66). Missed must-act: detention omitted, residential (no contract price) omitted, POD "no liftgate" omitted.
 
-## v2 changes (rules only; prompt and key unchanged; v1 kept as app_v1.html)
+## v2 changes (rules only; prompt and key unchanged; v1 kept as docs/archive/app_v1.html)
 Each new rule can only send a bill to a person. None can add a charge.
 1. Delivery-note keyword scan: any service named in the driver note or POD that the AI did not extract → person.
 2. Unsupported-charge scan (detention, storage, redelivery…) → person.

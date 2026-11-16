@@ -1,0 +1,6 @@
+# Built output: assembled by tools/build.py from src/, so it is not counted as source.
+app/index.html linguist-generated=true
+# Slides, write-ups, screenshots and the archived v1 page are documentation.
+docs/** linguist-documentation=true
+# Hand-written source with long lines; without this GitHub's minified-file heuristic skips it.
+src/**/*.js linguist-generated=false

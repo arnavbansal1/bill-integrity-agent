@@ -1,3 +1,6 @@
 __pycache__/
+*.pyc
+.pytest_cache/
 tests/shots/
 *.bak
+.DS_Store

@@ -192,20 +192,23 @@ Next: **random sample of real past bills (rates) + audited history (known hard c
 
 | Path | What |
 |---|---|
-| [`app/index.html`](app/index.html) | The built single-page app. Open it in a browser and click **▶ Start demo** |
-| `app/review_app.html`, `app/build.py` | Review app source (agent v2 rules) and the build script |
-| `app/rollout.js`, `app/rollout.css` | Rollout plan tab: phases, gates, assumptions, business case |
-| `app/demo.js`, `app/recorded_blind.json` | Guided demo, drill, "Your next step", and the recorded live run |
-| `app/arch.py`, `app/evals.py` | Diagram generators and the "Evals we ran" panel |
-| `app/app_v1.html` | Agent v1, kept unchanged for the before/after |
-| [`case/`](case) | Blind bills, frozen answer keys, eval plan, key generators (`FROZEN.sha256`) |
+| [`app/index.html`](app/index.html) | **Built output.** The single-page app, assembled by `tools/build.py`. Open it in a browser and click **▶ Start demo** |
+| [`src/engine/`](src/engine) | The logic: helpers, backstops, validation of AI output, pricing rules, the pipeline and model calls, exception learning, scoring, and the rollout model (plan defaults, business model, gates, plan-changing assumptions) |
+| [`src/ui/`](src/ui) | Rendering and wiring: the biller console, the rollout view, and the guided demo layer |
+| [`src/data/`](src/data) | Fictional reference data and test bills as the page loads them (contracts, tariff, dev and blind bills, in-page copies of the answer keys, saved run) |
+| [`src/styles.css`](src/styles.css), [`src/app.html`](src/app.html) | The stylesheet, and the page template with markers where styles, script and panels go |
+| [`tools/`](tools) | `build.py` (assembles the page), `arch.py` (diagrams, architecture panel), `evals.py` ("Evals we ran" panel) |
+| [`case/`](case) | Blind bills, frozen answer keys, eval plan, key generators (`FROZEN.sha256`), and the recorded live run the demo shows |
 | [`tests/`](tests) | Five Playwright suites, the hand-written oracle extraction, and results for v1 and v2 |
-| [`docs/`](docs) | Deck, demo card, results write-up, images |
+| [`docs/`](docs) | Deck, demo card, results write-up, images, and agent v1 kept unchanged for the before/after (`docs/archive/app_v1.html`) |
 
 ```
 pip install playwright && playwright install chromium
-python3 app/build.py
+python3 tools/build.py            # assemble app/index.html from src/
+python3 tools/build.py --check    # confirm the built page matches the sources
 for t in tests/test_*.py; do python3 "$t" | tail -1; done
 ```
 
-The page runs offline on a recorded live run. Live Claude mode and stored run history work when it's hosted as a claude.ai artifact; the six live runs cited above are stored there, and one is included as `app/recorded_blind.json`.
+The page runs offline on a recorded live run. Live Claude mode and stored run history work when it's hosted as a claude.ai artifact; the six live runs cited above are stored there, and one is included as `case/recorded_run_blind.json`.
+
+The script files in `src/` are numbered and concatenated in that order, byte for byte, so the page stays a single self-contained file. A few engine files also hold the render function that sits under the same section of the original page.
