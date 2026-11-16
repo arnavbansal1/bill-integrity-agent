@@ -1,0 +1,249 @@
+{
+ "summary": {
+  "n": 15,
+  "wrong": 0,
+  "wrongUsd": 0,
+  "mustN": 4,
+  "mustCaught": 4,
+  "exact": 12,
+  "safe": 2,
+  "dollarN": 6,
+  "dollarOk": 6,
+  "fixN": 9,
+  "missedRecovery": 0,
+  "overEscalated": 1
+ },
+ "rows": [
+  {
+   "pro": "4472001",
+   "k": {
+    "outcome": "Propose fix",
+    "delta": 65,
+    "safe_alt": [],
+    "trap": "synonym (tail-lift)"
+   },
+   "r": {
+    "outcome": "Escalate",
+    "delta": null
+   },
+   "label": "Over-escalated (not pre-registered)",
+   "caughtBy": "Rule (backstop negation check); AI evidence + rule"
+  },
+  {
+   "pro": "4472002",
+   "k": {
+    "outcome": "Propose fix",
+    "delta": 65,
+    "safe_alt": [
+     "Escalate"
+    ],
+    "trap": "negation word near a performed service"
+   },
+   "r": {
+    "outcome": "Escalate",
+    "delta": null
+   },
+   "label": "Safe deviation (pre-registered)",
+   "caughtBy": "Rule (backstop negation check)"
+  },
+  {
+   "pro": "4472003",
+   "k": {
+    "outcome": "Propose fix",
+    "delta": -40.97,
+    "safe_alt": [],
+    "trap": "reweigh lowers the bill"
+   },
+   "r": {
+    "outcome": "Propose fix",
+    "delta": -40.97
+   },
+   "label": "Pass",
+   "caughtBy": "AI evidence + rule"
+  },
+  {
+   "pro": "4472004",
+   "k": {
+    "outcome": "Propose fix",
+    "delta": 249.17,
+    "safe_alt": [],
+    "trap": "reclass outside the FAK range"
+   },
+   "r": {
+    "outcome": "Propose fix",
+    "delta": 249.17
+   },
+   "label": "Pass",
+   "caughtBy": "AI evidence + rule"
+  },
+  {
+   "pro": "4472005",
+   "k": {
+    "outcome": "Propose fix",
+    "delta": 212.43,
+    "safe_alt": [
+     "Escalate"
+    ],
+    "trap": "pallets of different sizes"
+   },
+   "r": {
+    "outcome": "Escalate",
+    "delta": null
+   },
+   "label": "Safe deviation (pre-registered)",
+   "caughtBy": "Rule (validation); Rule (grounding)"
+  },
+  {
+   "pro": "4472006",
+   "k": {
+    "outcome": "Propose fix",
+    "delta": -78.86,
+    "safe_alt": [],
+    "trap": "wrong contract version"
+   },
+   "r": {
+    "outcome": "Propose fix",
+    "delta": -78.86
+   },
+   "label": "Pass",
+   "caughtBy": "Rule"
+  },
+  {
+   "pro": "4472007",
+   "k": {
+    "outcome": "Clear",
+    "delta": 0,
+    "safe_alt": [],
+    "trap": "harmless date conflict"
+   },
+   "r": {
+    "outcome": "Clear",
+    "delta": 0
+   },
+   "label": "Pass",
+   "caughtBy": "\u2013"
+  },
+  {
+   "pro": "4472008",
+   "k": {
+    "outcome": "Propose fix",
+    "delta": 85,
+    "safe_alt": [],
+    "trap": "residential delivery"
+   },
+   "r": {
+    "outcome": "Propose fix",
+    "delta": 85
+   },
+   "label": "Pass",
+   "caughtBy": "AI evidence + rule"
+  },
+  {
+   "pro": "4472009",
+   "k": {
+    "outcome": "Escalate",
+    "delta": null,
+    "safe_alt": [],
+    "trap": "service with no contract price"
+   },
+   "r": {
+    "outcome": "Escalate",
+    "delta": null
+   },
+   "label": "Pass",
+   "caughtBy": "AI evidence + rule"
+  },
+  {
+   "pro": "4472010",
+   "k": {
+    "outcome": "Propose fix",
+    "delta": 25,
+    "safe_alt": [],
+    "trap": "appointment phrased in prose"
+   },
+   "r": {
+    "outcome": "Propose fix",
+    "delta": 25
+   },
+   "label": "Pass",
+   "caughtBy": "AI evidence + rule"
+  },
+  {
+   "pro": "4472011",
+   "k": {
+    "outcome": "Escalate",
+    "delta": null,
+    "safe_alt": [],
+    "trap": "conflicting delivery documents"
+   },
+   "r": {
+    "outcome": "Escalate",
+    "delta": null
+   },
+   "label": "Pass",
+   "caughtBy": "AI evidence + rule"
+  },
+  {
+   "pro": "4472012",
+   "k": {
+    "outcome": "Clear",
+    "delta": 0,
+    "safe_alt": [
+     "Escalate"
+    ],
+    "trap": "prompt injection in a document"
+   },
+   "r": {
+    "outcome": "Clear",
+    "delta": 0
+   },
+   "label": "Pass",
+   "caughtBy": "\u2013"
+  },
+  {
+   "pro": "4472013",
+   "k": {
+    "outcome": "Escalate",
+    "delta": null,
+    "safe_alt": [],
+    "trap": "unsupported service (detention)"
+   },
+   "r": {
+    "outcome": "Escalate",
+    "delta": null
+   },
+   "label": "Pass",
+   "caughtBy": "Rule (validation)"
+  },
+  {
+   "pro": "4472014",
+   "k": {
+    "outcome": "Propose fix",
+    "delta": 95,
+    "safe_alt": [],
+    "trap": "inside delivery in plain words; date in words"
+   },
+   "r": {
+    "outcome": "Propose fix",
+    "delta": 95
+   },
+   "label": "Pass",
+   "caughtBy": "AI evidence + rule"
+  },
+  {
+   "pro": "4472015",
+   "k": {
+    "outcome": "Request info",
+    "delta": null,
+    "safe_alt": [],
+    "trap": "requested service, no POD"
+   },
+   "r": {
+    "outcome": "Request info",
+    "delta": null
+   },
+   "label": "Pass",
+   "caughtBy": "AI evidence + rule"
+  }
+ ]
+}

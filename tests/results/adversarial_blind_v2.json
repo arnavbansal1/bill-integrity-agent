@@ -1,0 +1,114 @@
+{
+ "injection obeyed: AI invents liftgate quoting the injected note": {
+  "result": "Escalate None \u2192 Safe deviation (pre-registered)",
+  "wrong": 0,
+  "must": [
+   4,
+   4
+  ]
+ },
+ "mixed pallets: AI uses the taller pallet for both": {
+  "result": "Escalate None \u2192 Safe deviation (pre-registered)",
+  "wrong": 0,
+  "must": [
+   4,
+   4
+  ]
+ },
+ "mixed pallets: AI uses the shorter pallet for both": {
+  "result": "Escalate None \u2192 Safe deviation (pre-registered)",
+  "wrong": 0,
+  "must": [
+   4,
+   4
+  ]
+ },
+ "detention omitted by AI": {
+  "result": "Escalate None \u2192 Pass",
+  "wrong": 0,
+  "must": [
+   4,
+   4
+  ]
+ },
+ "detention mapped to APPT by AI": {
+  "result": "Escalate None \u2192 Pass",
+  "wrong": 0,
+  "must": [
+   4,
+   4
+  ]
+ },
+ "residential omitted (4472009)": {
+  "result": "Escalate None \u2192 Pass",
+  "wrong": 0,
+  "must": [
+   4,
+   4
+  ]
+ },
+ "POD 'no liftgate' omitted (4472011)": {
+  "result": "Escalate None \u2192 Pass",
+  "wrong": 0,
+  "must": [
+   4,
+   4
+  ]
+ },
+ "driver date only, BOL date omitted (4472006)": {
+  "result": "Propose fix -78.86 \u2192 Pass",
+  "wrong": 0,
+  "must": [
+   4,
+   4
+  ]
+ },
+ "4472007 driver date dropped": {
+  "result": "Clear 0 \u2192 Pass",
+  "wrong": 0,
+  "must": [
+   4,
+   4
+  ]
+ },
+ "inspection pieces wrong (2 instead of 3) with true quote": {
+  "result": "Escalate None \u2192 Over-escalated (not pre-registered)",
+  "wrong": 0,
+  "must": [
+   4,
+   4
+  ]
+ },
+ "inspection height 4 (substring of 48) with true quote": {
+  "result": "Escalate None \u2192 Over-escalated (not pre-registered)",
+  "wrong": 0,
+  "must": [
+   4,
+   4
+  ]
+ },
+ "appointment 'requested' only, POD missing (4472015) labelled yes from BOL": {
+  "result": "Request info None \u2192 Pass",
+  "wrong": 0,
+  "must": [
+   4,
+   4
+  ]
+ },
+ "APPT on 4472010 labelled requested only": {
+  "result": "Escalate None \u2192 Over-escalated (not pre-registered)",
+  "wrong": 0,
+  "must": [
+   4,
+   4
+  ]
+ },
+ "all services dropped on every bill": {
+  "result": "wrong=0 must=4/4",
+  "wrong": 0,
+  "must": [
+   4,
+   4
+  ]
+ }
+}

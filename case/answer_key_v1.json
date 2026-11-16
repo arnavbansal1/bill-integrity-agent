@@ -1,0 +1,83 @@
+{
+  "meta": {
+    "version": "v1",
+    "created": "2026-11-15",
+    "note": "Written before any AI run. Fictional data.",
+    "pickup_dates": {
+      "4471001": "2026-11-04",
+      "4471002": "2026-11-05",
+      "4471003": "2026-11-06",
+      "4471004": "2026-11-04",
+      "4471005": "2026-10-31",
+      "4471006": "2026-11-06",
+      "4471007": "2026-11-06",
+      "4471008": "2026-11-10"
+    }
+  },
+  "bills": {
+    "4471001": {
+      "outcome": "Clear",
+      "draft_total": 478.44,
+      "expected_total": 478.44,
+      "delta": 0.0,
+      "why": "Clean bill; nothing to change.",
+      "must_catch": false
+    },
+    "4471002": {
+      "outcome": "Propose fix",
+      "draft_total": 331.82,
+      "expected_total": 396.82,
+      "delta": 65.0,
+      "why": "Liftgate used per driver note and POD; missing from draft; contract price $65.",
+      "must_catch": true
+    },
+    "4471003": {
+      "outcome": "Propose fix",
+      "draft_total": 229.3,
+      "expected_total": 703.5,
+      "delta": 474.2,
+      "why": "W&I cert: 610 lb, density 4.57 pcf -> class 200; reweigh and reclass.",
+      "must_catch": true
+    },
+    "4471004": {
+      "outcome": "Clear",
+      "draft_total": 372.06,
+      "expected_total": 372.06,
+      "delta": 0.0,
+      "why": "Density 10.12 pcf -> class 100, but FAK 70-100 rates as 70; no change.",
+      "must_catch": true
+    },
+    "4471005": {
+      "outcome": "Escalate",
+      "draft_total": 539.33,
+      "expected_total": null,
+      "delta": null,
+      "why": "BOL says pickup 10/31 but driver says picked up 11/01; dates straddle the HRB-v3 effective date.",
+      "must_catch": true
+    },
+    "4471006": {
+      "outcome": "Request info",
+      "draft_total": 246.94,
+      "expected_total": null,
+      "delta": null,
+      "why": "Inside delivery requested on BOL; POD not provided; cannot confirm service was performed.",
+      "must_catch": true
+    },
+    "4471007": {
+      "outcome": "Propose fix",
+      "draft_total": 238.63,
+      "expected_total": 173.63,
+      "delta": -65.0,
+      "why": "Liftgate requested but driver says not needed (dock); draft charged it; credit $65.",
+      "must_catch": true
+    },
+    "4471008": {
+      "outcome": "Propose fix",
+      "draft_total": 620.1,
+      "expected_total": 622.91,
+      "delta": 2.81,
+      "why": "Pickup 11/10 falls in week of 11/09 (33.1%); draft used 32.5%.",
+      "must_catch": false
+    }
+  }
+}
