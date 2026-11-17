@@ -7,7 +7,7 @@ import copy, json, sys
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 import os
-APP = Path(os.environ.get("APP",str(ROOT/"app/index.html"))).resolve().as_uri()
+APP = Path(os.environ.get("APP",str(ROOT/"app/index.html"))).resolve().as_uri() + "#all"
 KEY = json.load(open(str(ROOT/"case/blind_key_v1.json")))["bills"]
 DEVKEY = json.load(open(str(ROOT/"case/answer_key_v1.json")))["bills"]
 TAG = os.environ.get("TAG","v2")

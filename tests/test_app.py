@@ -7,7 +7,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 import os
-APP = Path(os.environ.get("APP",str(ROOT/"app/index.html"))).resolve().as_uri()
+APP = Path(os.environ.get("APP",str(ROOT/"app/index.html"))).resolve().as_uri() + "#all"
 KEY = json.load(open(str(ROOT/"case/answer_key_v1.json")))["bills"]
 fails = []
 

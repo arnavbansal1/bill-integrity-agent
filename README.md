@@ -14,6 +14,8 @@ A working prototype for a less-than-truckload (LTL) freight carrier's billing te
 - [Frontend and backend](#frontend-and-backend)
 - [Architecture](#architecture)
 - [Methods](#methods)
+- [Choosing the approach: a bake-off on independent blind sets](#choosing-the-approach-a-bake-off-on-independent-blind-sets)
+- [Agents around the core](#agents-around-the-core)
 - [Evals: what ran, why, and results](#evals-what-ran-why-and-results)
 - [The most useful failure](#the-most-useful-failure)
 - [What's real, mocked and not built](#whats-real-mocked-and-not-built)
@@ -127,6 +129,47 @@ stateDiagram-v2
 - **Exception learning as candidates.** A biller's override or escalation can become a candidate rule. It stays inactive until it has enough examples, passes the frozen sets, and clears a risk tier set by its worst factor (scope, dollars per bill, exposure, reversibility, human approval).
 - **Rollout plan as a model, not a slide.** The second tab computes gates, sample sizes and the business case from editable assumptions, and shows which assumptions change the plan.
 
+## Choosing the approach: a bake-off on independent blind sets
+
+**I tested whether extra agent autonomy earned its complexity. It did not, so the simpler bounded design stays.**
+
+The uncertain step is reading the documents. Four ways to fill that one slot were scored on the same frozen answers; pricing, checks and the final outcome are the same code for every option. The decision rule was fixed before any score existed: any unsafe result eliminates an approach (it released or proposed a charge when a person should decide, or proposed a wrong amount); then the best worst-run score on a blind set; ties go to the simpler approach; if every approach is unsafe, nothing runs unattended.
+
+The two blind sets (12 bills each) were written by a separate agent from the case brief alone. It never saw the rules or prompts, and each set was frozen with a hash before any approach ran on it ([`case/blind_sets/`](case/blind_sets)).
+
+| Approach | Round 1 | Round 2 | Unsafe result |
+|---|---|---|---|
+| Rules only (no model) | 3 of 12 | 3 of 12 | Both rounds |
+| Hybrid: one model call, code verifies (the core) | 7 of 12 | 5 of 12 | Both rounds |
+| Model only: reads, judges and prices | 10–11 of 12 | 11 of 12 | Both rounds |
+| Tool-using agent, code verifies | 7 of 12 | 4 of 12 | Both rounds |
+
+What this showed:
+- **No approach earned the right to run unattended.** A person approves every charge.
+- **The builder's own blind set had hidden gaps.** The independent sets found five bills the build would have released (no bill of lading on file; an inspection certificate mentioned but missing; a redelivery written as "RE-DEL"; collect freight terms; a blank declared weight). All five are encoded as guards and regression cases. After the first three, the hybrid scored 10 of 12 with no unsafe result on the round-1 set (live); the two newest guards still need a live rerun.
+- **Model only performed best on extraction in two small synthetic rounds and still produced unsafe, money-impacting results**, so the model does not set dollars.
+- **The tool-using agent did not outperform the simpler approaches on these development rounds.**
+
+![Why this design: the call, then the round-2 table](docs/img/approach_bakeoff.png)
+
+Small synthetic samples: this is development evidence for choosing an approach, not a measure of real-world performance.
+
+## Agents around the core
+
+Agents are workers inside the workflow. Code keeps permissions, pricing and every dollar check; a person approves anything that moves money or leaves the building.
+
+| Agent | Job | Tools (enforced in code) | Human gate |
+|---|---|---|---|
+| Investigator | Opens a bill's documents and reports the evidence | Read-only, one bill, 12 calls | Code decides; a biller approves |
+| Handoff drafter | Writes the request to the terminal, billing owner or account manager | None; cannot send | Code checks every dollar and quote; a biller sends |
+| Reviewer (experiment) | Re-reads the documents behind a draft | Read-only | One gate among several |
+| Dispute responder | Gathers evidence on a customer dispute and drafts the reply | Read-only | Code computes uphold or credit; a biller approves |
+| Shipper coaching (sketch) | Turns repeat corrections into talking points | None | Account manager decides |
+
+Path checks run in code and do not depend on the model cooperating: a quote counts only if the agent opened that document; every document on file must be opened; a read for another bill is refused; a failed or wrong-bill answer sends the bill to a person. In the second live run of nine drafts, all nine passed the code checks and seven were approvable; the reviewer blocked two (one real catch, one over-strict).
+
+![Architecture in one picture](docs/img/architecture_one_picture.png)
+
 ## Evals: what ran, why, and results
 
 How: freeze the answer key → run → score the outcome and the path → find what was caught only by luck → add a rule → replay everything.
@@ -138,7 +181,7 @@ How: freeze the answer key → run → score the outcome and the path → find w
 | Forced-high confidence | Confidence is the model grading itself; this checks it carries no weight | No outcome changed |
 | Outcome + path scoring | Outcome-only scoring hid v1's luck; path scoring showed which catches relied on AI caution alone | v2 added a rule behind each AI-only catch found in v1 |
 | Run-to-run stability | One run can look perfect by chance | Routing changed once in 6 runs, toward a person, never toward money |
-| Builder-authored unit/regression tests | Fast, deterministic, rerun on every change; the frozen keys are the regression set | 234 checks across 5 suites pass on synthetic fixtures |
+| Builder-authored unit/regression tests | Fast, deterministic, rerun on every change; the frozen keys are the regression set | 303 checks across 7 suites pass on synthetic fixtures |
 
 **Ground truth.** There are two kinds. The expected outcome: each bill is scored against an answer key frozen (sha256, [`case/FROZEN.sha256`](case/FROZEN.sha256)) before any run and never shown to the model. The plan, metrics and decision rules were frozen with it ([`case/EVAL_PLAN_blind_v1.md`](case/EVAL_PLAN_blind_v1.md)). The system of record: every re-rated charge must match the contract, tariff and fuel tables. Both are synthetic and written by the builder, so this is development evidence, not real-world performance. In production, ground truth is biller-adjudicated real bills plus the carrier's live contracts and billing system.
 
@@ -198,8 +241,8 @@ Next: **random sample of real past bills (rates) + audited history (known hard c
 | [`src/data/`](src/data) | Fictional reference data and test bills as the page loads them (contracts, tariff, dev and blind bills, in-page copies of the answer keys, saved run) |
 | [`src/styles.css`](src/styles.css), [`src/app.html`](src/app.html) | The stylesheet, and the page template with markers where styles, script and panels go |
 | [`tools/`](tools) | `build.py` (assembles the page), `arch.py` (diagrams, architecture panel), `evals.py` ("Evals we ran" panel) |
-| [`case/`](case) | Blind bills, frozen answer keys, eval plan, key generators (`FROZEN.sha256`), and the recorded live run the demo shows |
-| [`tests/`](tests) | Five Playwright suites, the hand-written oracle extraction, and results for v1 and v2 |
+| [`case/`](case) | Blind bills, frozen answer keys, eval plan, key generators (`FROZEN.sha256`), the recorded live run the demo shows, the two independent blind sets with their brief and generators (`blind_sets/`), the dispute key, the recorded bake-off rounds and the recorded agent drafts |
+| [`tests/`](tests) | Seven Playwright suites (the two new ones cover the approach slot, agent path checks, the bake-off and the agent team), the hand-written oracle extraction, and results for v1 and v2 |
 | [`docs/`](docs) | Deck, demo card, results write-up, images, and agent v1 kept unchanged for the before/after (`docs/archive/app_v1.html`) |
 
 ```

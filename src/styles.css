@@ -204,3 +204,32 @@ details.adv{position:relative;display:inline-block}details.adv>summary{list-styl
 .legend{margin:0 20px 10px;font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
 .legend .lay{margin-left:0;margin-right:4px}.legend .seg{margin-left:auto}
 body[data-lay="fe"] [data-layer="be"],body[data-lay="fe"] [data-layer="gt"],body[data-lay="be"] [data-layer="fe"]{display:none}
+.pill{display:inline-block;font:700 11px/1 Inter,sans-serif;border-radius:999px;padding:3px 8px;white-space:nowrap}
+.pill.pass{background:var(--goodSoft);color:var(--good)}.pill.fail{background:var(--badSoft);color:var(--bad)}.pill.warn{background:var(--warnSoft);color:var(--warn)}
+.sub-d{margin:8px 0}.sub-d>summary{cursor:pointer;font-weight:600}
+.rule{border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:8px;padding:10px 14px;margin:10px 0;background:var(--soft)}
+.rule ol{margin:6px 0 0;padding-left:20px}.rule li{margin:3px 0}
+table.bake td,table.bake th{vertical-align:top}table.bake td:first-child{min-width:220px}table.bake .muted{font-weight:400;font-size:12px}
+.choice{font-size:15px;margin:12px 0 6px;padding:10px 14px;border-radius:8px;background:var(--accentSoft)}
+.agbox{border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin:10px 0}
+.ag-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.ag-n{font-weight:700;white-space:nowrap}.ag-s{flex:1;min-width:220px;font-size:13.5px}
+.ag-d{margin-top:6px}.ag-d>summary{cursor:pointer;font-size:13px;font-weight:600}.ag-tr{margin:6px 0;padding-left:22px;font-size:13px}.ag-tr li{margin:3px 0}.ag-tr code{font-size:12.5px}
+.draft{border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin:6px 0;background:var(--soft)}.draft .dbody{white-space:pre-wrap;margin-top:4px;font-size:13.5px}
+.chk{list-style:none;margin:6px 0;padding:0;font-size:13px}.chk li{margin:4px 0}
+.dispute{border-left:4px solid var(--warn);background:var(--warnSoft);border-radius:6px;padding:8px 12px;margin:10px 0 4px;font-size:13.5px}.dispute div{margin-top:3px}
+#planDelta{display:none;margin:12px 0}body.rollout-on #planDelta{display:block}
+body.lean .lean-hide{display:none}
+.leanbar{margin:14px 0;text-align:center}
+.glance{margin:4px 0 14px}.g-row{display:flex;align-items:stretch;gap:8px;margin:8px 0;flex-wrap:wrap}
+.g-box{flex:1;min-width:150px;border-radius:10px;padding:10px 12px;border:1px solid var(--line);font-size:13.5px}.g-box small{display:block;margin-top:3px;color:var(--muted);font-size:12px;line-height:1.35}
+.g-box.g-src{background:var(--soft)}.g-box.ai{background:var(--infoSoft)}.g-box.code{background:var(--accentSoft)}.g-box.human{background:var(--warnSoft)}
+.g-ar{align-self:center;font-size:18px;color:var(--muted)}.g-line{margin:8px 0 0;font-size:14px}
+body.lean #evalsPanel:not(.more) .evtab td:nth-child(3),body.lean #evalsPanel:not(.more) .evtab th:nth-child(3),body.lean #evalsPanel:not(.more) .evtab td:nth-child(5),body.lean #evalsPanel:not(.more) .evtab th:nth-child(5),body.lean #evalsPanel:not(.more) .evtab td .muted,body.lean #evalsPanel:not(.more) .evh,body.lean #evalsPanel:not(.more) .evtab~.evtab{display:none}
+body:not(.lean) #evMore{display:none}
+.demobox{left:max(20px,calc(50% - 400px));bottom:22px;width:min(600px,calc(100vw - 40px));padding:18px 22px;border:2px solid var(--accent)}
+.demobox b{font-size:19px;margin:6px 0 8px}.demobox p{font-size:15.5px;line-height:1.5;margin-bottom:14px}
+.dm-top{font-size:13px}.dm-nav .btn{padding:9px 18px;font-size:14.5px}
+.archwrap svg{max-width:760px;margin:0 auto}
+.ev-short{display:none}
+body.lean #evalsPanel:not(.more) .ev-short{display:inline}body.lean #evalsPanel:not(.more) .ev-long,body.lean #evalsPanel:not(.more) .note{display:none}
+body.lean #bakeBody>table.bake td:nth-child(2),body.lean #bakeBody>table.bake th:nth-child(2),body.lean #bakeBody>table.bake td:nth-child(3),body.lean #bakeBody>table.bake th:nth-child(3),body.lean #bakeBody>table.bake td:nth-child(4),body.lean #bakeBody>table.bake th:nth-child(4),body.lean #bakeBody>table.bake td:nth-child(5),body.lean #bakeBody>table.bake th:nth-child(5),body.lean #bakeBody>table.bake td:nth-child(8),body.lean #bakeBody>table.bake th:nth-child(8),body.lean #bakeBody>table.bake td:nth-child(9),body.lean #bakeBody>table.bake th:nth-child(9),body.lean #bakeBody>table.bake td .muted,body.lean #bakeBody>.choice .muted{display:none}

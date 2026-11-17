@@ -5,7 +5,7 @@ ROOT = _pl.Path(__file__).resolve().parents[1]
 import json, os, sys, math
 from pathlib import Path
 from playwright.sync_api import sync_playwright
-APP = Path(str(ROOT/"app/index.html")).resolve().as_uri()
+APP = Path(str(ROOT/"app/index.html")).resolve().as_uri() + "#all"
 ORACLE = json.load(open(str(ROOT/"tests/oracle_blind_v1.json")))
 fails = []
 def check(n, c, d=""):

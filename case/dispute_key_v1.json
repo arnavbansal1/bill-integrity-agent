@@ -1,0 +1,6 @@
+{"_note":"Frozen before any dispute-agent run. Credits come from the frozen blind answer key (expected total vs draft total), not from a model.",
+"D1":{"pro":"4472004","reason_code":"WEIGHT_OR_CLASS","decision":"Uphold","credit":0},
+"D2":{"pro":"4472006","reason_code":"RATE_OR_CONTRACT","decision":"Credit","credit":78.86},
+"D3":{"pro":"4472003","reason_code":"WEIGHT_OR_CLASS","decision":"Credit","credit":40.97},
+"D4":{"pro":"4472011","reason_code":"ACCESSORIAL","decision":"Person decides","credit":null},
+"D5":{"pro":"4472008","reason_code":"ACCESSORIAL","decision":"Person decides","credit":null}}

@@ -32,6 +32,20 @@ def build():
     script = "".join(read(f) for f in parts)
     # case data: the recorded live run shown by default on the blind set
     script = put(script, "__RECORDED_BLIND__", read(ROOT / "case" / "recorded_run_blind.json").strip())
+    # case data for the approach bake-off and the agent team: frozen blind sets, dispute key, recorded rounds and drafts
+    import hashlib, json
+    case = ROOT / "case"
+    for n in ("2", "3"):
+        key_text = read(case / "blind_sets" / f"blind{n}_key.json")
+        bills = [dict(pro=p, **v) for p, v in json.loads(read(case / "blind_sets" / f"blind{n}_bills.json")).items()]
+        script = put(script, f"__BLIND{n}_BILLS__", json.dumps(bills))
+        script = put(script, f"__BLIND{n}_KEY__", json.dumps(json.loads(key_text)["bills"]))
+        script = put(script, f"__BLIND{n}_SHA__", hashlib.sha256(key_text.encode()).hexdigest())
+    dk_text = read(case / "dispute_key_v1.json"); dk = json.loads(dk_text); dk.pop("_note", None)
+    script = put(script, "__DISPUTE_KEY__", json.dumps(dk))
+    script = put(script, "__DISPUTE_SHA__", hashlib.sha256(dk_text.encode()).hexdigest())
+    script = put(script, "__BAKE_REC__", read(case / "bakeoff_rounds.json").strip())
+    script = put(script, "__TEAM_REC__", read(case / "recorded_agent_drafts.json").strip())
     page = read(SRC / "app.html")
     page = put(page, "/*__BUILD:STYLES__*/", read(SRC / "styles.css"))
     page = put(page, "<!--__BUILD:PANEL:EVALS__-->", evals.panel_html())

@@ -4,7 +4,7 @@ ROOT = _pl.Path(__file__).resolve().parents[1]
 
 import os
 from playwright.sync_api import sync_playwright
-APP = "file://" + os.environ.get("APP_PATH", str(ROOT/"app/index.html"))
+APP = "file://" + os.environ.get("APP_PATH", str(ROOT/"app/index.html")) + "#all"
 fails = []
 def check(n, c, d=""):
     print(("PASS " if c else "FAIL ") + n + ("" if c else f"  [{d}]"))
@@ -44,8 +44,8 @@ with sync_playwright() as p:
     for i in range(6):
         pg.wait_for_timeout(250); titles.append(pg.inner_text("#dmT"))
         if i < 5: pg.click("#dmF")
-    check("demo: 6 steps in story order", titles == ["Frontend · what the biller gets", "Backend · what the system did", "Hardest case · recorded live run", "Most useful failure, and the fix", "Ground truth and evals", "Path to production"], titles)
-    check("demo step 6 lands on rollout phases", pg.is_visible("#r-phases"))
+    check("demo: 6 steps in story order", titles == ["Frontend · what the biller gets", "Backend · AI reads and drafts, code decides, a person approves", "Hardest case · recorded live run", "Most useful failure, and the fix", "Evidence · how the approach was chosen", "Path to production · before and after"], titles)
+    check("demo step 6 lands on the rollout tab, before/after table first", pg.is_visible("#planDelta") and pg.is_visible("#r-phases"))
     pg.click("#dmF"); check("demo finishes and hides", not pg.is_visible("#demoBox"))
     pg.click("#viewReview"); pg.keyboard.press("Escape")
     check("evals panel lists runs and planned items", "Planned, not run" in pg.text_content("#evalsPanel") and "Why this one over the alternatives" in pg.text_content("#evalsPanel"))
