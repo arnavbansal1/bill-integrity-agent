@@ -14,7 +14,7 @@ A working prototype for a less-than-truckload (LTL) freight carrier's billing te
 - [Frontend and backend](#frontend-and-backend)
 - [Architecture](#architecture)
 - [Methods](#methods)
-- [Choosing the approach: a bake-off on independent blind sets](#choosing-the-approach-a-bake-off-on-independent-blind-sets)
+- [Choosing the approach: a bake-off on separately generated blind sets](#choosing-the-approach-a-bake-off-on-separately-generated-blind-sets)
 - [Agents around the core](#agents-around-the-core)
 - [Evals: what ran, why, and results](#evals-what-ran-why-and-results)
 - [The most useful failure](#the-most-useful-failure)
@@ -129,7 +129,7 @@ stateDiagram-v2
 - **Exception learning as candidates.** A biller's override or escalation can become a candidate rule. It stays inactive until it has enough examples, passes the frozen sets, and clears a risk tier set by its worst factor (scope, dollars per bill, exposure, reversibility, human approval).
 - **Rollout plan as a model, not a slide.** The second tab computes gates, sample sizes and the business case from editable assumptions, and shows which assumptions change the plan.
 
-## Choosing the approach: a bake-off on independent blind sets
+## Choosing the approach: a bake-off on separately generated blind sets
 
 **I tested whether extra agent autonomy earned its complexity. It did not, so the simpler bounded design stays.**
 
@@ -146,7 +146,7 @@ The two blind sets (12 bills each) were written by a separate agent from the cas
 
 What this showed:
 - **No approach earned the right to run unattended.** A person approves every charge.
-- **The builder's own blind set had hidden gaps.** The independent sets found five bills the build would have released (no bill of lading on file; an inspection certificate mentioned but missing; a redelivery written as "RE-DEL"; collect freight terms; a blank declared weight). All five are encoded as guards and regression cases. After the first three, the hybrid scored 10 of 12 with no unsafe result on the round-1 set (live); the two newest guards still need a live rerun.
+- **The builder's own blind set had hidden gaps.** The blind cases generated without access to my prompts or rules found five bills the build would have released (no bill of lading on file; an inspection certificate mentioned but missing; a redelivery written as "RE-DEL"; collect freight terms; a blank declared weight). All five are encoded as guards and regression cases. After the first three, the hybrid scored 10 of 12 with no unsafe result on the round-1 set (live); the two newest guards still need a live rerun.
 - **Model only performed best on extraction in two small synthetic rounds and still produced unsafe, money-impacting results**, so the model does not set dollars.
 - **The tool-using agent did not outperform the simpler approaches on these development rounds.**
 
@@ -243,7 +243,7 @@ Next: **random sample of real past bills (rates) + audited history (known hard c
 | [`src/data/`](src/data) | Fictional reference data and test bills as the page loads them (contracts, tariff, dev and blind bills, in-page copies of the answer keys, saved run) |
 | [`src/styles.css`](src/styles.css), [`src/app.html`](src/app.html) | The stylesheet, and the page template with markers where styles, script and panels go |
 | [`tools/`](tools) | `build.py` (assembles the page), `arch.py` (diagrams, architecture panel), `evals.py` ("Evals we ran" panel) |
-| [`case/`](case) | Blind bills, frozen answer keys, eval plan, key generators (`FROZEN.sha256`), the recorded live run the demo shows, the two independent blind sets with their brief and generators (`blind_sets/`), the dispute key, the recorded bake-off rounds and the recorded agent drafts |
+| [`case/`](case) | Blind bills, frozen answer keys, eval plan, key generators (`FROZEN.sha256`), the recorded live run the demo shows, the two separately generated blind sets with their brief and generators (`blind_sets/`), the dispute key, the recorded bake-off rounds and the recorded agent drafts |
 | [`tests/`](tests) | Seven Playwright suites (the two new ones cover the approach slot, agent path checks, the bake-off and the agent team), the hand-written oracle extraction, and results for v1 and v2 |
 | [`docs/`](docs) | Deck, demo card, results write-up, images, and agent v1 kept unchanged for the before/after (`docs/archive/app_v1.html`) |
 

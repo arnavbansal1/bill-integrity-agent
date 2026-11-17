@@ -19,10 +19,10 @@
 - **Forced-high confidence:** confidence is the model grading itself, so I checked it carries no weight. No outcome changed on the synthetic test sets.
 - **Outcome + path scoring:** outcome-only scoring hid v1's luck; path scoring found catches that depended only on the model's caution.
 - **Run-to-run stability:** one run can look perfect by chance. Routing changed once, toward a person, never toward money. *Sample:* 6 live runs, one model.
-- **Approach bake-off on independent blind sets:** a set I write shares my blind spots; an independent set plus a decision rule fixed in advance removes both. Every approach had an unsafe result in both rounds, so none runs unattended; 5 gaps became guards. *Sample:* two rounds of 12 synthetic bills, written by a separate agent.
+- **Approach bake-off on separately generated blind sets:** a set I write shares my blind spots; a separately generated set plus a decision rule fixed in advance removes both. Every approach had an unsafe result in both rounds, so none runs unattended; 5 gaps became guards. *Sample:* two rounds of 12 synthetic bills, written by a separate agent.
 - **Agent path and permissions:** outcome scoring can't see a skipped document; code checks on the tool trace can. *Sample:* offline checks with a stub model, plus 3 live agent runs.
 - **Draft gate:** deterministic checks for what is objectively checkable (dollars, quotes), a model reviewer only for free text, as one gate, same vendor. Second live run: 7 of 9 drafts approvable. The reviewer is an experiment, not yet a demonstrated safety improvement.
-- **Planned, not run:** a random sample of real past bills (rates), an audited-history backtest (known hard cases), live shadow (the real workflow), user acceptance testing with billers, and a third independent blind set. The first four need carrier data or access.
+- **Planned, not run:** a random sample of real past bills (rates), an audited-history backtest (known hard cases), live shadow (the real workflow), user acceptance testing with billers, and a third separately generated blind set. The first four need carrier data or access.
 
 ## Open only if they ask (one line each)
 - **Who owns the conflict call?** "That's a question for you: in your deployments, is it billing or the account manager?"
