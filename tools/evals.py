@@ -45,7 +45,7 @@ SHORT = {
  "Forced-high confidence": "No outcome changed",
  "Outcome + path scoring": "Found catches that relied on luck",
  "Run-to-run stability": "1 change in 6 runs, toward a person",
- "Approach bake-off on independent blind sets": "No approach safe unattended; 5 gaps now guarded",
+ "Approach bake-off on independent blind sets": "No approach safe unattended; 5 gaps encoded as guards",
  "Agent path and permissions": "29 offline checks pass; 3 live runs",
  "Draft gate": "7 of 9 live drafts approvable",
  "Builder-authored unit/regression tests": "All 7 suites pass",

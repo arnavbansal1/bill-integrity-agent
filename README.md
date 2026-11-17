@@ -160,7 +160,7 @@ Agents are workers inside the workflow. Code keeps permissions, pricing and ever
 
 | Agent | Job | Tools (enforced in code) | Human gate |
 |---|---|---|---|
-| Investigator | Opens a bill's documents and reports the evidence | Read-only, one bill, 12 calls | Code decides; a biller approves |
+| Investigator (optional path; the default is one model call) | Opens a bill's documents and reports the evidence | Read-only, one bill, 12 calls | Code decides; a biller approves |
 | Handoff drafter | Writes the request to the terminal, billing owner or account manager | None; cannot send | Code checks every dollar and quote; a biller sends |
 | Reviewer (experiment) | Re-reads the documents behind a draft | Read-only | One gate among several |
 | Dispute responder | Gathers evidence on a customer dispute and drafts the reply | Read-only | Code computes uphold or credit; a biller approves |
@@ -169,6 +169,8 @@ Agents are workers inside the workflow. Code keeps permissions, pricing and ever
 Path checks run in code and do not depend on the model cooperating: a quote counts only if the agent opened that document; every document on file must be opened; a read for another bill is refused; a failed or wrong-bill answer sends the bill to a person. In the second live run of nine drafts, all nine passed the code checks and seven were approvable; the reviewer blocked two (one real catch, one over-strict).
 
 ![Architecture in one picture](docs/img/architecture_one_picture.png)
+
+The default view is short on purpose: five panels (architecture, agents, why this design, evals, scorecard), each opening to a few lines and one small table, with detail folded. Add `#all` to the address to start with everything expanded; the tests run that way.
 
 ## Evals: what ran, why, and results
 

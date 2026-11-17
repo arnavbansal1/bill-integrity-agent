@@ -10,7 +10,7 @@
 | 3 | **Hardest case** (PRO 4472011) | "On this recorded model run over a synthetic bill, the driver note conflicts with the proof of delivery. The system doesn't resolve conflicting evidence itself, so it routes the case to a person." Then stop. |
 | 4 | **Failure + fix** (drill) | "In offline replay, I injected 14 plausible model mistakes; 8 produced money-impacting actions in v1, and the added route-to-a-person safeguards reduced that to 0 of 14. This example simulates the model following a malicious instruction in a source document, and the backstop catches it." |
 | 5 | **Evidence** ("What two rounds say") | "I tested whether extra agent autonomy actually earned its complexity: four ways of reading the documents, on synthetic bills written by someone other than me. When it didn't, I kept the simpler bounded architecture, and a person approves every charge." Don't narrate the table. |
-| 6 | **Path** (Rollout plan → before and after) | "From here, the release path is shadow on real bills, then a human-approved pilot, then widening only by error type when its predefined gates are met. This table shows what the prototype pulled earlier and what still waits on evidence." |
+| 6 | **Path** (Rollout plan → before and after) | "From here, the release path is shadow on real bills, then a human-approved pilot, then widening only by error type when its predefined gates are met. These cards show what changed and what still waits on evidence." |
 | 7 | Close (no click) | "The next evidence I don't have is billers judging real bills in shadow. After that comes formal user acceptance testing and a controlled pilot; every widening remains a separate release decision." |
 
 ## Evals: why this one over the alternatives (and how small the sample is)
@@ -27,8 +27,8 @@
 ## Open only if they ask (one line each)
 - **Who owns the conflict call?** "That's a question for you: in your deployments, is it billing or the account manager?"
 - **Is this really an agent? Why not fully agentic?** "Model where the input is messy, deterministic logic for money, human approval until real evidence supports more autonomy. In a small development bake-off, more autonomous approaches sometimes read better but still produced unsafe money-impacting outputs."
-- **How would it run on an agent platform?** "I wouldn't rebuild the platform: connectors for the reads, a memory store for customer rules, and my frozen sets as the pass bar for its simulations. Open the Agent team panel."
-- **What moved in the timeline?** "Accessorial capture could potentially shadow from week 1 if the same evidence and integration path is available. Build time compressed; evidence time did not."
+- **How would it run on an agent platform?** "I wouldn't rebuild the platform: connectors for the reads, a memory store for customer rules, and my frozen sets as the pass bar for its simulations. Open the Agents panel."
+- **Does accessorial capture move earlier?** "Some accessorial checks could potentially shadow earlier because they reuse the same documents and integration path; broader accessorial capture remains its own rollout decision." (The deck keeps it in Phase 2.)
 - **Why not fully automate?** "Billers approve, own the outcome and talk to the customer. Autonomy widens only by error type, after gates on real bills."
 - **How would you know recall?** "Billers adjudicate every flagged bill, plus a separately reviewed random sample of Clear bills. I never claim recall from flagged bills."
 - **What if the model changes?** "The frozen sets rerun on every model, prompt or rule change; I'd switch models only if must-act recall holds."

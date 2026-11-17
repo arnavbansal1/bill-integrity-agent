@@ -192,6 +192,13 @@ const PLATFORM_MAP=[
  ["Planning layer","Shows where leakage concentrates by terminal, customer and error type","The wedge, its sizing and the order of rollout"],
  ["External event signals","Outside events into agent decisions","Assumption to confirm: weekly fuel index and contract effective dates trigger re-checks"]
 ];
+const AGCARDS=[
+ ["Investigator (optional path)","Reads the bill's documents with tools. The default is one model call","A · B · some D checks","Read-only tools, one bill"],
+ ["Handoff drafter","Writes the message to the next person","All options","Cannot send"],
+ ["Independent reviewer (experiment)","Re-reads the documents behind a draft","All drafts","One gate of several"],
+ ["Dispute responder","Gathers evidence, drafts the reply","C","Code sets uphold or credit"],
+ ["Shipper coaching (sketch)","Turns repeat fixes into talking points","F","Account manager decides"]
+];
 const GOV=[
  ["Identity","Each agent has its own credentials, owner and audit trail","Five agents, each with its own job, tool list and trace. Not built: separate credentials; in production each agent gets its own"],
  ["Workflow-scoped permissions","Access follows the task and stays least-privileged","Tools are read-only and limited to one bill in code; the drafter has no tools and cannot send; the dispute agent cannot set a credit. Out-of-scope calls are refused and send the bill to a person"],
@@ -201,12 +208,21 @@ const GOV=[
 ];
 const PLAN_DELTA=[
  ["A + B · pre-invoice audit, reweigh and reclass","Phase 1, weeks 1–8, two terminals","Same scope. Approach chosen on frozen answers; build on the existing platform with this prototype's keys and gates as the pass bar","Shadow sample on real bills; four straight green pilot weeks"],
- ["D · accessorial capture","Phase 2: starts after week 8, 8–12 weeks, first result about week 16–20","Same pipeline as A + B in the prototype: could potentially shadow from week 1 if the same evidence and integration path is available; go or no-go about week 8 on its own gate","Driver-note and proof-of-delivery quality by terminal"],
+ ["D · accessorial capture","Phase 2: starts after week 8, 8–12 weeks, first result about week 16–20","Still Phase 2. Some accessorial checks could potentially shadow earlier because they reuse the same documents and integration path; broader accessorial capture remains its own rollout decision.","Driver-note and proof-of-delivery quality by terminal"],
  ["Handoffs to terminal, billing owner, account manager","Manual; not in the plan","Drafted by an agent, checked by code, sent by a person; in the pilot","Where these requests go today (email, billing-system note)"],
  ["C · dispute responder","Phase 2: build starts after week 8","Prototyped on five synthetic disputes; shadow on past disputes could start about week 5, first result about weeks 8–12","Dispute history, reason codes, who may approve a credit"],
  ["F · shipper coaching","Later","Sketch only: counts repeat corrections","About 90 days of real corrections; a sales owner"],
  ["E · quote agent","Phase 3","Not built","Lane, capacity and win-rate data"]
 ];
+const PLAN_CARDS=[
+ ["A + B · bill audit, reweigh","Same timing","same","Phase 1, weeks 1–8","Same scope; the approach was tested on blind sets first","Shadow sample; four green pilot weeks"],
+ ["D · accessorial capture","Still Phase 2","same","After week 8; first result about week 16–20","Some checks could shadow earlier; the workflow stays its own decision","Driver-note and delivery-proof quality"],
+ ["Handoffs to people","New","new","Manual; not in the plan","An agent drafts, code checks, a person sends","Where these requests go today"],
+ ["C · dispute responder","Prototyped","early","Build starts after week 8","Prototyped; shadow on past disputes could start about week 5","Dispute history; who approves a credit"],
+ ["F · shipper coaching","Sketch","sketch","Later","Sketch only","About 90 days of real corrections"],
+ ["E · quote agent","Not built","none","Phase 3","Not built","Lane, capacity and win-rate data"]
+];
+const planCardsHtml=()=>`<div class="pcards">${PLAN_CARDS.map(c=>`<div class="pcard"><div class="pc-top"><b>${esc(c[0])}</b><i class="ptag ${c[2]}">${esc(c[1])}</i></div><div class="pc-row"><span>Before</span>${esc(c[3])}</div><div class="pc-row now"><span>After</span>${esc(c[4])}</div><div class="pc-wait">Waits on: ${esc(c[5])}</div></div>`).join("")}</div><p class="note"><b>Build time compressed; evidence time did not.</b> Week numbers are estimates under case assumptions. Nothing here has run on carrier data.</p>`;
 const planDeltaHtml=()=>`<table class="score"><tr><th>Workstream</th><th>Before (deck)</th><th>After (what the prototype supports)</th><th>What still gates it</th></tr>${PLAN_DELTA.map(r=>`<tr>${r.map((c,i)=>`<td>${i?esc(c):"<b>"+esc(c)+"</b>"}</td>`).join("")}</tr>`).join("")}</table><p class="note"><b>Build time compressed; evidence time did not.</b> Week numbers are estimates under case assumptions, not commitments. Shadow still needs its sample, the pilot still needs four straight weeks of green gates, and nothing here has run on carrier data.</p>`;
 function disputeRows(){
  return DISPUTES.map(dp=>{const r=DATASETS.blind.bills.some(b=>b.pro===dp.pro)&&DATASET==="blind"?state.results[dp.pro]:null;const k=DISPUTE_KEY[dp.id];const dec=r?disputeDecision(dp,r):null;
@@ -217,7 +233,9 @@ function renderTeam(){
  const el=$("teamBody");if(!el)return;const coach=coachRows().filter(c=>c.wc.length||c.svc.length||c.ours.length);
  const row=(r,idx)=>`<tr>${idx.map((i,k)=>`<td>${k?esc(r[i]):"<b>"+esc(r[i])+"</b>"}</td>`).join("")}</tr>`;
  el.innerHTML=`<p style="margin-top:0"><b>Agents are workers inside the workflow.</b> Each takes one job a person does today. Code keeps permissions, pricing and every dollar check. A person approves anything that moves money or leaves the building.</p>
- <table class="score"><tr><th>Agent</th><th>Job it takes off a person</th><th>Human gate</th></tr>${TEAM.map(r=>row(r,[0,1,3])).join("")}</table>
+ <div class="agcards">${AGCARDS.map(c=>`<div class="agcard"><b>${esc(c[0])}</b><span>${esc(c[1])}</span><div><i class="chip opt">${esc(c[2])}</i><i class="chip gate">${esc(c[3])}</i></div></div>`).join("")}</div>
+ <p class="agflow"><span class="chip opt">deck option it serves</span> <span class="chip gate">what keeps it in check</span> · every agent: <b>agent drafts or gathers → code checks → a person approves</b></p>
+ <details class="sub-d"><summary>The same roster as a table, with each human gate</summary><table class="score"><tr><th>Agent</th><th>Job it takes off a person</th><th>Human gate</th></tr>${TEAM.map(r=>row(r,[0,1,3])).join("")}</table></details>
  <details class="sub-d"><summary>Tools each agent may use (enforced in code), and where it runs on an agent platform</summary><table class="score"><tr><th>Agent</th><th>Tools</th><th>On an agent platform</th></tr>${TEAM.map(r=>row(r,[0,2,4])).join("")}</table></details>
  <details class="sub-d"><summary>How this runs on an agent platform · what a platform provides, and what this work adds</summary><table class="score"><tr><th>Platform piece</th><th>What it does for this case</th><th>What this work adds on top</th></tr>${PLATFORM_MAP.map(r=>`<tr>${r.map((c,i)=>`<td>${i?esc(c):"<b>"+esc(c)+"</b>"}</td>`).join("")}</tr>`).join("")}</table><p class="note">Platform pieces are described generically. The prototype stands in for the platform with one page and a model call: it is the specification and the acceptance test, not a replacement.</p></details>
  <details class="sub-d"><summary>Five governance principles for enterprise agents · where this build shows each</summary><table class="score"><tr><th>Principle</th><th>What it means</th><th>In this build</th></tr>${GOV.map(r=>`<tr>${r.map((c,i)=>`<td>${i?esc(c):"<b>"+esc(c)+"</b>"}</td>`).join("")}</tr>`).join("")}</table></details>
@@ -230,7 +248,8 @@ function renderTeam(){
 }
 const _renderAll3=renderAll;renderAll=function(){_renderAll3();renderTeam()};
 $("bakePanel").insertAdjacentHTML("beforebegin",`<details class="panel" id="teamPanel" data-layer="be"><summary>Agent team · who does what, what code keeps, how it runs on an agent platform <span class="lay be">Backend</span></summary><div class="pbody" id="teamBody"></div></details>`);
-$("rollout").insertAdjacentHTML("beforebegin",`<section class="panel" id="planDelta"><h2 style="margin-top:0">Before and after · what the prototype changes in the plan</h2>${planDeltaHtml()}</section>`);
+$("rollout").insertAdjacentHTML("beforebegin",`<section class="panel" id="planDelta"><h2 style="margin-top:0">Before and after · what the prototype changes in the plan</h2>${planCardsHtml()}<details class="sub-d"${/all/.test(location.hash)?" open":""}><summary>The same comparison as a table, with more detail</summary>${planDeltaHtml()}</details><div class="actions"><button class="btn" id="planMore">Show the full plan: case facts, what changes the plan, risks, gates</button></div></section>`);
+$("planMore").onclick=()=>{const on=document.body.classList.toggle("rfull");$("planMore").textContent=on?"Show the short plan":"Show the full plan: case facts, what changes the plan, risks, gates"};
 /* Guided demo: six steps, one sentence each. Steps 2, 5 and 6 are new; 1, 3 and 4 are unchanged. */
 {const o=DEMO.slice();DEMO.length=0;
  DEMO.push(
@@ -241,7 +260,7 @@ $("rollout").insertAdjacentHTML("beforebegin",`<section class="panel" id="planDe
   Object.assign(o[3],{c:"A simulated model mistake: it obeys an instruction hidden in a document. A code backstop catches it. In offline replay this kind of failure went from 8 of 14 to 0 of 14."}),
   {t:"Evidence · how the approach was chosen",c:"I tested whether extra agent autonomy earned its complexity. It did not, so the simpler design stays and a person approves every charge. Development evidence on synthetic bills.",
    go:()=>{toReview();const p=openPanel("bakePanel");const el=$("bakeCall");if(el)el.scrollIntoView({behavior:"smooth",block:"center"});return el||p}},
-  {t:"Path to production · before and after",c:"Shadow on real bills, then a human-approved pilot, then widen one error type at a time. The table shows what moved earlier and what still waits on evidence.",
+  {t:"Path to production · before and after",c:"Shadow on real bills, then a human-approved pilot, then widen one error type at a time. The cards show what changed and what still waits on evidence.",
    go:()=>{if(!document.body.classList.contains("rollout-on"))$("viewRollout").click();const el=$("planDelta");el.scrollIntoView({behavior:"smooth",block:"start"});return el}});}
 /* Architecture first, in one picture; then agents, approach, evals, scorecard. */
 {const arch=$("archPanel"),body=arch.querySelector(".pbody")||arch;
