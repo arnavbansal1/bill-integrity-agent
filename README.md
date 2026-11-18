@@ -4,6 +4,8 @@
 
 A working prototype for a less-than-truckload (LTL) freight carrier's billing team. Carriers lose revenue at handoffs: the driver used a liftgate, or the dock reweighed the freight, but the evidence never reaches the invoice. Today a biller would have to open every document for every bill to catch it. This prototype checks each bill before the invoice goes out, proposes evidence-backed fixes, sends anything uncertain to a person, and puts a concrete next step in front of the biller.
 
+**[▶ Open the live demo](https://arnavbansal1.github.io/bill-integrity-agent/)** (runs in any browser, no login; it replays a recorded live AI run). Click **Start demo** for a six-step tour; "How it works" is at the top of the page.
+
 ![App overview: bills to invoice, source documents and the agent check](docs/img/app_overview.png)
 
 > Development evidence on synthetic bills. The carrier, customers, contracts, tariff and documents are fictional. The prototype never posts a charge; "approve" only records a decision.
